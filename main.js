@@ -34,7 +34,7 @@ function mineGenerator(mineQuantity) {
 					numGenerated = Math.floor(Math.random() * 100 + 1);
 					// ricontrollo da capo per evitare che il numero nuovo sia uguale a uno precedente
 					i = -1;
-					console.log(numGenerated + ' doppione, riparto a controllare da capo');
+					console.log(numGenerated + ' doppione, genero nuovo numero e riparto a controllare da capo');
 				}
 			}
 		//pusho il numero generato (sicuramente non doppio) nell'array
@@ -48,12 +48,17 @@ function mineGenerator(mineQuantity) {
 
 
 function gameChecker() {
-	var counter = 0, input, correctInput = false;
+	var counter = 0, input, inputArray = [], correctInput = false, duplicate = false;
 
 	while (counter < 84) {
 		input = parseInt(prompt('Inserisci un numero:'));
 
 		while (correctInput === false) {
+			// accendo una flag se l'utente aveva già inserito quel numero
+			for (var i = 0; i < inputArray.length; i++) {
+				if (inputArray[i] === input) 		duplicate = true;
+			}
+
 			// controllo che l'utente abbia inserito soltanto un numero
 			if (isNaN(input)) {
 				input = parseInt(prompt('Inserisci un numero:'));
@@ -62,12 +67,19 @@ function gameChecker() {
 			else if (input > 100 || input < 1) {
 				input = parseInt(prompt('Inserisci un numero da 1 a 100:'));
 			}
+			// faccio ri-inserire l'input se prima l'ho trovato doppio
+			else if (duplicate === true) {
+				duplicate = false;
+				console.log(input + " l'avevi già messo");
+				input = parseInt(prompt('Avevi già inserito quel numero, riprova:'));
+			}
 			else {
 				correctInput = true;
 			}
 		}
 		correctInput = false;
 		console.log('inserito ' + input);
+		inputArray.push(input);
 
 		// verifico se è tra le mine
 		for (var i = 0; i < mine.length; i++) {
