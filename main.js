@@ -3,10 +3,15 @@
 // La partita termina quando il giocatore inserisce un numero “vietato” o raggiunge il numero massimo possibile di numeri consentiti.
 // Al termine della partita il software deve comunicare il punteggio, cioè il numero di volte che l’utente ha inserito un numero consentito.
 
+// COSE DA FARE:
+// - verificare che l'utente non inserisca 2 volte lo stesso numero
+
 var mine, result;
 
+
 // genero 16 mine
-mine = mineGenerator();
+var mineQuantity = 16;
+mine = mineGenerator(mineQuantity);
 // faccio inserire il numero dall'utente, guardo se è una mina, ritorno il punteggio
 result = gameChecker();
 // stampo il punteggio
@@ -17,8 +22,27 @@ else					alert('Partita finita! Punteggio: ' + result);
 
 
 // # # FUNZIONI # #
-function mineGenerator() {
-	var array = [0,1,2,3,5,7,11,13,17,19,23,29,31,37,41,43];
+function mineGenerator(mineQuantity) {
+	var numGenerated, array = [];
+
+	for (var i = 1; i < mineQuantity; i++) {
+		//genero un numero
+		numGenerated = Math.floor(Math.random() * 100 + 1);
+		//controllo che non sia già stato generato in precedenza
+		for (var i = 0; i < array.length; i++) {
+				if (array[i] === numGenerated) {
+					numGenerated = Math.floor(Math.random() * 100 + 1);
+					// ricontrollo da capo per evitare che il numero nuovo sia uguale a uno precedente
+					i = -1;
+					console.log(numGenerated + ' doppione, riparto a controllare da capo');
+				}
+			}
+		//pusho il numero generato (sicuramente non doppio) nell'array
+		array.push(numGenerated)
+	}
+	//ordino per comodità, non necessario
+	array = array.sort();
+	console.log('mine generate: ' + array);
 	return array;
 }
 
