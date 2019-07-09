@@ -48,16 +48,25 @@ function mineGenerator(mineQuantity) {
 
 
 function gameChecker() {
-	var gameOver = false, counter = 0, input;
+	var counter = 0, input, correctInput = false;
 
-	while (gameOver === false) {
-
-		// controllo che non abbia già inserito tutti i numeri possibili
-		if (counter === 84) {
-			return "won";
-		}
-
+	while (counter < 84) {
 		input = parseInt(prompt('Inserisci un numero:'));
+
+		while (correctInput === false) {
+			// controllo che l'utente abbia inserito soltanto un numero
+			if (isNaN(input)) {
+				input = parseInt(prompt('Inserisci un numero:'));
+			}
+			// blocco intervallo 1 - 100
+			else if (input > 100 || input < 1) {
+				input = parseInt(prompt('Inserisci un numero da 1 a 100:'));
+			}
+			else {
+				correctInput = true;
+			}
+		}
+		correctInput = false;
 		console.log('inserito ' + input);
 
 		// verifico se è tra le mine
@@ -68,4 +77,6 @@ function gameChecker() {
 		// se no aumenta punteggio
 		counter++;
 	}
+	// se ha inserito tutti i numeri possibili NON mine ha vinto
+	return "won";
 }
